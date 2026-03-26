@@ -1,13 +1,119 @@
-.env
-.pytest_cache/
+# Byte-compiled / optimized / DLL files
 __pycache__/
-*.pyc
-*.pyo
-*.pyd
+*.py[codz]
+*$py.class
+
+# C extensions
+*.so
+
+# Distribution / packaging
 .Python
-.venv/
-venv/
 build/
+develop-eggs/
 dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+share/python-wheels/
 *.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# Virtual environments and local env files
+.env
+.envrc
+.venv/
+.venv
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+
+# Test, cache, coverage
+.pytest_cache/
+htmlcov/
+.tox/
+.nox/
+.coverage
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+*.py.cover
+.hypothesis/
+cover/
+.mypy_cache/
+.ruff_cache/
+.pyre/
+.pytype/
+dmypy.json
+.dmypy.json
+
+# Build and generated outputs
 output/
+site/
+docs/_build/
+target/
+.pybuilder/
+__pypackages__/
+.pdm-python
+.pdm-build/
+.pixi
+marimo/_static/
+marimo/_lsp/
+__marimo__/
+
+# Logs and local state
+*.log
+pip-log.txt
+pip-delete-this-directory.txt
+db.sqlite3
+db.sqlite3-journal
+instance/
+.webassets-cache
+.scrapy
+celerybeat-schedule
+celerybeat.pid
+*.sage.py
+
+# Editors and tooling
+.spyderproject
+.spyproject
+.ropeproject
+.abstra/
+.cursorignore
+.cursorindexingignore
+
+# Optional package manager locks/configs
+# Pipfile.lock
+# uv.lock
+# poetry.lock
+# poetry.toml
+# pdm.lock
+# pdm.toml
+
+# PyInstaller
+*.manifest
+*.spec
+
+# Sphinx / translations
+*.mo
+*.pot
+
+# Jupyter / IPython
+.ipynb_checkpoints
+profile_default/
+ipython_config.py
+
+# Misc
+local_settings.py
+.pypirc
