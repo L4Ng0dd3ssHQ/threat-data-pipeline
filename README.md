@@ -50,20 +50,21 @@ Generated outputs:
 
 ```mermaid
 flowchart LR
-    A["URLHaus API Feed"] --> B["Ingestion Layer"]
-    C["CISA KEV CSV"] --> B
-    D["Local CSV Uploads"] --> B
-    B --> E["Schema + Quality Validation"]
-    E --> F["Cleaning + Normalization"]
-    F --> G["Analysis Engine"]
-    G --> H["Visualization Layer"]
-    G --> I["Insight Generation"]
-    E --> J["Data Quality Report"]
-    H --> K["Excel Export"]
+    A[URLHaus API Feed] --> B[Ingestion Layer]
+    C[CISA KEV CSV] --> B
+    D[Local CSV Uploads] --> B
+    B --> E[Schema and Quality Validation]
+    E --> F[Cleaning and Normalization]
+    F --> G[Analysis Engine]
+    G --> H[Visualization Layer]
+    G --> I[Insight Generation]
+    E --> J[Data Quality Report]
+    H --> K[Excel Export]
     I --> K
     J --> K
-    H --> L["PDF Summary"]
+    H --> L[PDF Summary]
     I --> L
+
 ```
 
 Core modules:
