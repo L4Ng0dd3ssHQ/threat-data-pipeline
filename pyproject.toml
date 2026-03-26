@@ -1,0 +1,37 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "threat-data-pipeline"
+version = "0.1.0"
+description = "Production-style CSV analytics pipeline for cybersecurity threat intelligence data."
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+  "charset-normalizer>=3.3.2",
+  "matplotlib>=3.8.0",
+  "numpy>=1.26.0",
+  "openpyxl>=3.1.2",
+  "pandas>=2.2.0",
+  "python-dotenv>=1.0.1",
+  "reportlab>=4.1.0",
+  "requests>=2.31.0",
+]
+
+[project.optional-dependencies]
+dev = [
+  "pytest>=8.0.0",
+]
+
+[project.scripts]
+threat-pipeline = "threat_data_pipeline.cli:main"
+
+[tool.setuptools]
+package-dir = {"" = "src"}
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
