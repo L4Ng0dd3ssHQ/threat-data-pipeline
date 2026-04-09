@@ -15,6 +15,9 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--input-csv", action="append", default=[], help="Path to a local CSV file.")
     parser.add_argument("--urlhaus", action="store_true", help="Pull URLHaus recent CSV feed.")
     parser.add_argument("--kev", action="store_true", help="Pull CISA KEV CSV feed.")
+    parser.add_argument("--threatfox", action="store_true", help="Pull ThreatFox IOC feed.")
+    parser.add_argument("--alienvault", action="store_true", help="Pull AlienVault OTX pulse feed.")
+    parser.add_argument("--feodo", action="store_true", help="Pull Feodo Tracker botnet C2 feed.")
     parser.add_argument("--output-dir", default=None, help="Directory for reports and charts.")
     parser.add_argument("--start-date", default=None, help="Optional inclusive start date filter.")
     parser.add_argument("--end-date", default=None, help="Optional inclusive end date filter.")
@@ -46,6 +49,9 @@ def main() -> None:
         local_files=args.input_csv,
         include_urlhaus=args.urlhaus,
         include_kev=args.kev,
+        include_threatfox=args.threatfox,
+        include_alienvault=args.alienvault,
+        include_feodo_tracker=args.feodo,
         output_dir=output_dir,
         cleaning_config=CleaningConfig(
             numeric_strategy=args.numeric_missing_strategy,
