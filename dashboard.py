@@ -339,6 +339,36 @@ div[data-testid="stMetricValue"] {
     overflow: hidden;
 }
 
+
+.stack-shell {
+    max-width: 760px;
+    margin: 0 auto;
+}
+
+.selector-strip {
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    background: rgba(8, 18, 29, 0.96);
+    padding: 0.55rem 0.7rem;
+    margin-top: 0.7rem;
+}
+
+.run-shell {
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    background: rgba(8, 18, 29, 0.96);
+    padding: 0.7rem;
+    margin-top: 0.9rem;
+}
+
+.active-card {
+    margin-top: 0.9rem;
+}
+
+.standby-shell {
+    margin-top: 1rem;
+}
+
 @media (max-width: 900px) {
     .block-container {
         border-width: 12px;
@@ -549,8 +579,8 @@ st.markdown(
     """
     <div class="workstation-head">
         <span class="badge">Retro analyst workstation</span>
-        <div class="hero-title">Threat Intelligence Workstation.</div>
-        <div class="hero-copy">
+        <div class="hero-title" style="width:100%; max-width:none; white-space:normal; word-break:keep-all; overflow-wrap:normal; text-align:center; font-size:clamp(2.4rem, 4.6vw, 4.8rem); line-height:1.02;">Threat Intelligence<br>Workstation.</div>
+        <div class="hero-copy" style="margin-inline:auto;">
             A live intelligence console with a vintage desktop feel and a modern analyst workflow. Pull any feed, spotlight the strongest signal, and pivot through interactive charts without losing the visual drama.
         </div>
         <div class="info-grid">
@@ -625,10 +655,12 @@ if error_trace:
 if artifact is None:
     st.markdown(
         """
-        <div class="spotlight-card" style="margin-top:1rem; text-align:center;">
-            <div class="mono">Standby mode</div>
-            <h3 style="margin-top:0.5rem;">No live intel loaded</h3>
-            <p>Choose a feed and run the scan to wake up the workstation.</p>
+        <div class="stack-shell standby-shell">
+            <div class="spotlight-card" style="text-align:center;">
+                <div class="mono">Standby mode</div>
+                <h3 style="margin-top:0.5rem;">No live intel loaded</h3>
+                <p>Choose a feed and run the scan to wake up the workstation.</p>
+            </div>
         </div>
         """,
         unsafe_allow_html=True,
