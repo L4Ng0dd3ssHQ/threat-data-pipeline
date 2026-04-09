@@ -87,15 +87,15 @@ section[data-testid="stSidebar"] {
 }
 
 .block-container {
-    max-width: 1180px;
+    max-width: 1120px;
     margin-top: 2.6rem;
     margin-bottom: 0;
-    padding: 2rem 2rem 2.4rem 2rem;
+    padding: 1.8rem 1.8rem 2rem 1.8rem;
     background:
         linear-gradient(180deg, rgba(12, 22, 34, 0.96), rgba(7, 15, 24, 0.95)),
         linear-gradient(135deg, var(--screen), var(--screen-2));
-    border-radius: 20px;
-    border: 18px solid var(--shell);
+    border-radius: 16px;
+    border: 16px solid var(--shell);
     box-shadow:
         0 0 0 8px var(--shell-shadow),
         0 26px 80px rgba(0, 0, 0, 0.46),
@@ -107,29 +107,17 @@ section[data-testid="stSidebar"] {
     content: "";
     position: absolute;
     inset: 0;
-    border-radius: 6px;
+    border-radius: 4px;
     background:
         linear-gradient(180deg, rgba(255, 255, 255, 0.05), transparent 22%),
         repeating-linear-gradient(
             180deg,
-            rgba(255, 255, 255, 0.015) 0px,
-            rgba(255, 255, 255, 0.015) 1px,
+            rgba(255, 255, 255, 0.014) 0px,
+            rgba(255, 255, 255, 0.014) 1px,
             transparent 2px,
             transparent 4px
         );
     pointer-events: none;
-}
-
-.block-container::after {
-    content: "";
-    position: absolute;
-    top: -14px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 160px;
-    height: 8px;
-    border-radius: 999px;
-    background: rgba(70, 47, 39, 0.38);
 }
 
 h1, h2, h3, h4 {
@@ -144,9 +132,8 @@ p, label, .stMarkdown, .stCaption {
 .workstation-head {
     border: 1px solid var(--line);
     background: linear-gradient(135deg, rgba(7, 14, 24, 0.94), rgba(18, 35, 55, 0.78));
-    border-radius: 24px;
-    padding: 1.5rem 1.6rem 1.35rem 1.6rem;
-    box-shadow: inset 0 1px 0 rgba(255,255,255,0.04);
+    border-radius: 20px;
+    padding: 1.35rem 1.45rem 1.2rem 1.45rem;
 }
 
 .badge {
@@ -163,37 +150,37 @@ p, label, .stMarkdown, .stCaption {
 
 .hero-title {
     margin: 0.95rem 0 0.75rem 0;
-    font-size: clamp(2.3rem, 5vw, 4.2rem);
-    line-height: 0.94;
-    max-width: 10ch;
+    font-size: clamp(2.2rem, 5vw, 3.8rem);
+    line-height: 0.96;
+    max-width: 9ch;
 }
 
 .hero-copy {
     max-width: 54rem;
-    line-height: 1.75;
-    font-size: 1.02rem;
+    line-height: 1.7;
+    font-size: 1rem;
 }
 
 .info-grid {
     display: grid;
-    grid-template-columns: 1.3fr 1fr;
+    grid-template-columns: 1.2fr 1fr;
     gap: 1rem;
-    margin-top: 1.2rem;
+    margin-top: 1.1rem;
 }
 
-.panel, .source-card, .spotlight-card, .system-card {
+.panel, .source-card, .spotlight-card, .system-card, .active-card {
     border: 1px solid var(--line);
-    border-radius: 22px;
+    border-radius: 20px;
     background: var(--panel);
     backdrop-filter: blur(8px);
 }
 
-.panel, .spotlight-card, .system-card {
-    padding: 1.15rem 1.2rem;
+.panel, .spotlight-card, .system-card, .active-card {
+    padding: 1.1rem 1.15rem;
 }
 
 .source-card {
-    min-height: 168px;
+    min-height: 158px;
     padding: 1rem;
 }
 
@@ -294,7 +281,7 @@ div[data-testid="stMetricValue"] {
     background: linear-gradient(180deg, #d3c2b7, #b9a79b);
     border: 1px solid rgba(77, 56, 46, 0.35);
     border-radius: 0 0 22px 22px;
-    padding: 1.4rem 1.6rem 1.2rem 1.6rem;
+    padding: 1.2rem 1.4rem 1rem 1.4rem;
     box-shadow: 0 24px 60px rgba(0, 0, 0, 0.25);
 }
 
@@ -335,7 +322,7 @@ div[data-testid="stMetricValue"] {
 }
 
 .base-brand {
-    margin-top: 1rem;
+    margin-top: 0.9rem;
     text-align: center;
     font-family: "IBM Plex Mono", monospace;
     color: #334155;
@@ -357,10 +344,6 @@ div[data-testid="stMetricValue"] {
 
     .info-grid, .metric-ribbon, .drive-row {
         grid-template-columns: 1fr;
-    }
-
-    .drive-base {
-        margin-top: 0.4rem;
     }
 }
 </style>
@@ -434,7 +417,11 @@ def filter_dataframe(
 
 def build_spotlight(df: pd.DataFrame) -> tuple[str, str, str]:
     if df.empty:
-        return ("No active spotlight", "The current filter set returned no records.", "Adjust the feed or filters to surface live intelligence.")
+        return (
+            "No active spotlight",
+            "The current filter set returned no records.",
+            "Adjust the feed or filters to surface live intelligence.",
+        )
 
     threat_column = get_threat_column(df)
     indicator_column = get_indicator_column(df)
@@ -513,11 +500,19 @@ def build_timeline_chart(df: pd.DataFrame, date_column: str | None, rolling_wind
     trend["is_anomaly"] = trend["count"] > trend["threshold"]
 
     base = alt.Chart(trend).encode(x=alt.X("date:T", title="Date"))
-    line = base.mark_line(color=accent, strokeWidth=3).encode(y=alt.Y("count:Q", title="Records"), tooltip=["date:T", "count:Q"])
-    rolling = base.mark_line(color="#f2c14e", strokeDash=[6, 4], strokeWidth=2).encode(y=alt.Y("rolling_mean:Q", title="Records"))
-    anomalies = base.transform_filter(alt.datum.is_anomaly == True).mark_point(color="#ff5b6e", size=85, filled=True).encode(y="count:Q", tooltip=["date:T", "count:Q"])
+    line = base.mark_line(color=accent, strokeWidth=3).encode(
+        y=alt.Y("count:Q", title="Records"), tooltip=["date:T", "count:Q"]
+    )
+    rolling = base.mark_line(color="#f2c14e", strokeDash=[6, 4], strokeWidth=2).encode(
+        y=alt.Y("rolling_mean:Q", title="Records")
+    )
+    anomalies = base.transform_filter(alt.datum.is_anomaly == True).mark_point(
+        color="#ff5b6e", size=85, filled=True
+    ).encode(y="count:Q", tooltip=["date:T", "count:Q"])
     chart = (line + rolling + anomalies).properties(height=360, title="Activity Pulse")
-    chart = chart.configure_view(strokeOpacity=0).configure_axis(gridColor="rgba(255,255,255,0.08)", labelColor="#d7e7f5", titleColor="#d7e7f5").configure_title(color="#eef6ff", font="Space Grotesk", fontSize=18, anchor="start")
+    chart = chart.configure_view(strokeOpacity=0).configure_axis(
+        gridColor="rgba(255,255,255,0.08)", labelColor="#d7e7f5", titleColor="#d7e7f5"
+    ).configure_title(color="#eef6ff", font="Space Grotesk", fontSize=18, anchor="start")
     return chart, trend
 
 
@@ -540,10 +535,7 @@ def render_source_cards(selected_label: str) -> None:
 
 
 def render_exports(artifact) -> None:
-    export_rows = [
-        {"output": name, "path": str(path)}
-        for name, path in artifact.generated_files.items()
-    ]
+    export_rows = [{"output": name, "path": str(path)} for name, path in artifact.generated_files.items()]
     st.dataframe(pd.DataFrame(export_rows), use_container_width=True, hide_index=True)
 
 
@@ -553,9 +545,9 @@ st.markdown(
     """
     <div class="workstation-head">
         <span class="badge">Retro analyst workstation</span>
-        <div class="hero-title">Threat Intelligence, in a CRT Shell.</div>
+        <div class="hero-title">Threat Intelligence Workstation.</div>
         <div class="hero-copy">
-            A live cyber-intelligence console that looks like a restored desktop terminal, but behaves like a modern analyst cockpit. Pull any feed, spotlight the strongest signal, and pivot through interactive charts without losing the visual drama.
+            A live intelligence console with a vintage desktop feel and a modern analyst workflow. Pull any feed, spotlight the strongest signal, and pivot through interactive charts without losing the visual drama.
         </div>
         <div class="info-grid">
             <div class="panel">
@@ -583,12 +575,13 @@ selected_label = st.radio(
 )
 render_source_cards(selected_label)
 selected_source = SOURCES[selected_label]
+accent = selected_source["accent"]
 
 control_left, control_right = st.columns([2.3, 1])
 with control_left:
     st.markdown(
         f"""
-        <div class=\"system-card\">
+        <div class=\"active-card\" style=\"border: 2px solid {accent}; box-shadow: 0 0 0 1px rgba(255,255,255,0.04), 0 18px 38px rgba(0,0,0,0.18);\">
             <div class=\"mono\">Active feed</div>
             <h3 style=\"margin-top:0.35rem;\">{selected_label}</h3>
             <p>{selected_source['description']}</p>
@@ -617,7 +610,10 @@ active_source = st.session_state.get("dashboard_source", selected_label)
 error_trace = st.session_state.get("dashboard_error")
 
 if error_trace:
-    st.markdown('<div class="error-panel"><strong>System fault</strong><br>The live run hit an exception. The trace is below so we can debug it fast.</div>', unsafe_allow_html=True)
+    st.markdown(
+        '<div class="error-panel"><strong>System fault</strong><br>The live run hit an exception. The trace is below so we can debug it fast.</div>',
+        unsafe_allow_html=True,
+    )
     st.code(error_trace)
 
 if artifact is None:
@@ -695,14 +691,19 @@ else:
         unsafe_allow_html=True,
     )
 
-    tab_spotlight, tab_data, tab_charts, tab_exports = st.tabs(["Threat Spotlight", "Intel Grid", "Pulse Charts", "Exports"])
+    tab_spotlight, tab_data, tab_charts, tab_exports = st.tabs([
+        "Threat Spotlight",
+        "Intel Grid",
+        "Pulse Charts",
+        "Exports",
+    ])
 
     with tab_spotlight:
         left, right = st.columns([1.35, 1])
         with left:
             st.markdown(
                 f"""
-                <div class=\"spotlight-card\">
+                <div class=\"spotlight-card\" style=\"border-left: 4px solid {accent};\">
                     <div class=\"mono\">Threat spotlight</div>
                     <h2 style=\"margin-top:0.45rem; color:{accent};\">{spotlight_title}</h2>
                     <p style=\"font-size:1.04rem; line-height:1.8; color:var(--text);\">{spotlight_body}</p>
@@ -764,11 +765,17 @@ else:
         if trend_df is not None and not trend_df.empty:
             anomalies = trend_df[trend_df["is_anomaly"]]
             if not anomalies.empty:
-                st.dataframe(anomalies[["date", "count", "rolling_mean", "threshold"]], use_container_width=True, hide_index=True)
+                st.dataframe(
+                    anomalies[["date", "count", "rolling_mean", "threshold"]],
+                    use_container_width=True,
+                    hide_index=True,
+                )
 
     with tab_exports:
         render_exports(artifact)
-        image_paths = [path for path in artifact.generated_files.values() if Path(path).suffix.lower() == ".png" and Path(path).exists()]
+        image_paths = [
+            path for path in artifact.generated_files.values() if Path(path).suffix.lower() == ".png" and Path(path).exists()
+        ]
         if image_paths:
             gallery = st.columns(2)
             for index, image_path in enumerate(image_paths):
