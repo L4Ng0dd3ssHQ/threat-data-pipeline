@@ -221,6 +221,7 @@ def ingest_cisa_kev(settings: Settings) -> IngestionArtifact:
         chunk_size=settings.chunk_size,
     )
 
+
 def ingest_threatfox(settings: Settings) -> IngestionArtifact:
     if not settings.threatfox_api_key:
         raise IngestionError(
@@ -276,6 +277,7 @@ def ingest_alienvault(settings: Settings) -> IngestionArtifact:
         errors=[],
     )
 
+
 def ingest_feodo_tracker(settings: Settings) -> IngestionArtifact:
     raw_bytes = _download_csv(settings.feodo_tracker_url)
     return _read_csv_with_recovery(
@@ -286,6 +288,7 @@ def ingest_feodo_tracker(settings: Settings) -> IngestionArtifact:
         chunk_size=settings.chunk_size,
         read_csv_kwargs={"comment": "#"},
     )
+
 
 def merge_artifacts(artifacts: list[IngestionArtifact]) -> pd.DataFrame:
     frames: list[pd.DataFrame] = []

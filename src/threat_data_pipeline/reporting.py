@@ -8,9 +8,9 @@ import pandas as pd
 from openpyxl import load_workbook
 from openpyxl.cell.cell import ILLEGAL_CHARACTERS_RE
 from openpyxl.drawing.image import Image as XLImage
+from pandas import DatetimeTZDtype
 from pandas.api.types import (
     is_datetime64_any_dtype,
-    is_datetime64tz_dtype,
     is_object_dtype,
 )
 from reportlab.lib.pagesizes import letter
@@ -45,7 +45,7 @@ def _sanitize_for_excel(frame: pd.DataFrame) -> pd.DataFrame:
     sanitized = frame.copy()
     sanitized.columns = [clean_value(column) for column in sanitized.columns]
     for column in sanitized.columns:
-        if is_datetime64tz_dtype(sanitized[column]):
+        if isinstance(sanitized[column].dtype, DatetimeTZDtype):
             sanitized[column] = sanitized[column].dt.tz_localize(None)
             continue
         if is_datetime64_any_dtype(sanitized[column]) and not is_object_dtype(sanitized[column]):
