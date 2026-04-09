@@ -85,6 +85,14 @@ def _summarize_sources(df: pd.DataFrame) -> list[str]:
                 points.append(
                     f"The most frequently affected KEV vendor is {top_vendor.index[0]} with {int(top_vendor.iloc[0]):,} entries."
                 )
+
+    if "threatfox" in source_counts.index:
+        points.append(f"ThreatFox contributed {int(source_counts['threatfox']):,} IOC records.")
+    if "alienvault" in source_counts.index:
+        points.append(f"AlienVault OTX contributed {int(source_counts['alienvault']):,} threat pulse records.")
+    if "feodo_tracker" in source_counts.index:
+        points.append(f"Feodo Tracker contributed {int(source_counts['feodo_tracker']):,} botnet C2 records.")
+        
     return points
 
 

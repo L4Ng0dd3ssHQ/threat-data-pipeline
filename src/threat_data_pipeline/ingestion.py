@@ -206,6 +206,69 @@ def ingest_cisa_kev(settings: Settings) -> IngestionArtifact:
         chunk_size=settings.chunk_size,
     )
 
+def ingest_threatfox(settings: Settings) -> IngestionArtifact:
+    if not settings.threatfox_api_key:
+        raise IngestionError(
+            "THREATFOX_API_KEY is not set. Add it to .env before pulling ThreatFox data."
+        )
+    response = requests.post(
+        "https://threatfox-api.abuse.ch/api/v1/",
+        json={"query": "get_iocs", "days": 1},
+        headers={"API-KEY": settings.threatfox_api_key},
+        timeout=60,
+    )
+    response.raise_for_status()
+    data = response.json()
+    records = data.get("data", [])
+    dataframe = pd.DataFrame(records) if records else pd.DataFrame()
+    LOGGER.info("Ingested %s rows from threatfox", len(dataframe))
+    return IngestionArtifact(
+        source_name="threatfox",
+        dataframe=dataframe,
+        source_type="api",
+        origin="https://threatfox-api.abuse.ch/api/v1/",
+        encoding="utf-8",
+        skipped_rows=0,
+        errors=[],
+    )
+
+
+def ingest_alienvault(settings: Settings) -> IngestionArtifact:
+    if not settings.alienvault_api_key:
+        raise IngestionError(
+            "ALIENVAULT_API_KEY is not set. Add it to .env before pulling AlienVault OTX data."
+        )
+    response = requests.get(
+        "https://otx.alienvault.com/api/v1/pulses/subscribed",
+        headers={"X-OTX-API-KEY": settings.alienvault_api_key},
+        params={"limit": 20},
+        timeout=60,
+    )
+    response.raise_for_status()
+    data = response.json()
+    records = data.get("results", [])
+    dataframe = pd.DataFrame(records) if records else pd.DataFrame()
+    LOGGER.info("Ingested %s rows from alienvault", len(dataframe))
+    return IngestionArtifact(
+        source_name="alienvault",
+        dataframe=dataframe,
+        source_type="api",
+        origin="https://otx.alienvault.com/api/v1/pulses/subscribed",
+        encoding="utf-8",
+        skipped_rows=0,
+        errors=[],
+    )
+
+def ingest_feodo_tracker(settings: Settings) -> IngestionArtifact:
+    raw_bytes = _download_csv(settings.feodo_tracker_url)
+    return _read_csv_with_recovery(
+        source_name="feodo_tracker",
+        raw_bytes=raw_bytes,
+        origin=settings.feodo_tracker_url,
+        source_type="url",
+        chunk_size=settings.chunk_size,
+        read_csv_kwargs={"comment": "#"},
+    )
 
 def merge_artifacts(artifacts: list[IngestionArtifact]) -> pd.DataFrame:
     frames: list[pd.DataFrame] = []

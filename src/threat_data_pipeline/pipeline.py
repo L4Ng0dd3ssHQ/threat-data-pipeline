@@ -16,7 +16,16 @@ from .analysis import (
 )
 from .cleaning import CleaningConfig, clean_dataframe
 from .config import Settings
-from .ingestion import IngestionArtifact, ingest_cisa_kev, ingest_local_csv, ingest_urlhaus, merge_artifacts
+from .ingestion import (
+    IngestionArtifact,
+    ingest_alienvault,
+    ingest_cisa_kev,
+    ingest_feodo_tracker,
+    ingest_local_csv,
+    ingest_threatfox,
+    ingest_urlhaus,
+    merge_artifacts,
+)
 from .models import AnalysisArtifact
 from .validation import build_quality_report, infer_schema
 
@@ -76,6 +85,9 @@ def run_pipeline(
     local_files: list[str] | None = None,
     include_urlhaus: bool = False,
     include_kev: bool = False,
+    include_threatfox: bool = False,
+    include_alienvault: bool = False,
+    include_feodo_tracker: bool = False,
     output_dir: Path | None = None,
     cleaning_config: CleaningConfig | None = None,
     filter_config: FilterConfig | None = None,
@@ -89,6 +101,12 @@ def run_pipeline(
         artifacts.append(ingest_urlhaus(settings))
     if include_kev:
         artifacts.append(ingest_cisa_kev(settings))
+    if include_threatfox:
+        artifacts.append(ingest_threatfox(settings))
+    if include_alienvault:
+        artifacts.append(ingest_alienvault(settings))
+    if include_feodo_tracker:
+        artifacts.append(ingest_feodo_tracker(settings))
 
     combined = merge_artifacts(artifacts)
     combined = derive_severity(combined)
