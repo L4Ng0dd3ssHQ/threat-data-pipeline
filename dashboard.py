@@ -205,6 +205,7 @@ p, label, .stMarkdown, .stCaption {
 
 div[role="radiogroup"] {
     gap: 0.7rem;
+    justify-content: center;
 }
 
 div[role="radiogroup"] label {
@@ -218,10 +219,13 @@ div.stButton > button {
     background: linear-gradient(90deg, #ff6c2f, #ff944d);
     color: white;
     border: none;
-    border-radius: 14px;
-    padding: 0.78rem 1.1rem;
+    border-radius: 18px;
+    min-height: 92px;
+    width: 100%;
+    padding: 1.1rem 1.3rem;
+    font-size: 1.08rem;
     font-weight: 700;
-    box-shadow: 0 14px 28px rgba(255, 108, 47, 0.24);
+    box-shadow: 0 16px 34px rgba(255, 108, 47, 0.24);
 }
 
 div.stButton > button:hover {
@@ -567,17 +571,19 @@ st.markdown(
 )
 
 st.write("")
-selected_label = st.radio(
-    "Choose a feed",
-    options=list(SOURCES.keys()),
-    horizontal=True,
-    label_visibility="collapsed",
-)
+selector_shell = st.columns([1, 6, 1])
+with selector_shell[1]:
+    selected_label = st.radio(
+        "Choose a feed",
+        options=list(SOURCES.keys()),
+        horizontal=True,
+        label_visibility="collapsed",
+    )
 render_source_cards(selected_label)
 selected_source = SOURCES[selected_label]
 accent = selected_source["accent"]
 
-control_left, control_right = st.columns([2.3, 1])
+control_left, control_right = st.columns([2.0, 1.15])
 with control_left:
     st.markdown(
         f"""
