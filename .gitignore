@@ -118,3 +118,6 @@ ipython_config.py
 # Misc
 local_settings.py
 .pypirc
+
+.streamlit/secrets.toml
+.streamlit/credentials.toml

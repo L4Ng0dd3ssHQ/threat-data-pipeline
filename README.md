@@ -131,6 +131,46 @@ URLHAUS_API_KEY=your_urlhaus_auth_key
 CISA_KEV_URL=https://raw.githubusercontent.com/cisagov/kev-data/develop/known_exploited_vulnerabilities.csv
 ```
 
+## Dashboard
+
+Run the interactive Streamlit dashboard locally:
+
+```bash
+streamlit run dashboard.py
+```
+
+The dashboard reads the same settings as the CLI and supports both `.env` values and Streamlit secrets.
+
+## Streamlit Deployment
+
+To publish the dashboard and get a shareable URL, deploy `dashboard.py` to Streamlit Community Cloud.
+
+1. Push the latest repo changes to GitHub.
+2. Go to [Streamlit Community Cloud](https://share.streamlit.io/).
+3. Create a new app from `L4Ng0dd3ssHQ/threat-data-pipeline`.
+4. Set the main file path to `dashboard.py`.
+5. In app settings, add the secrets from `.streamlit/secrets.toml.example`.
+6. Deploy the app and copy the generated public URL.
+
+Secrets to add in Streamlit Cloud:
+
+```toml
+URLHAUS_API_KEY = "your-urlhaus-api-key"
+THREATFOX_API_KEY = "your-threatfox-api-key"
+ALIENVAULT_API_KEY = "your-alienvault-api-key"
+```
+
+Optional settings:
+
+```toml
+URLHAUS_FEED_URL = "https://urlhaus-api.abuse.ch/files/exports/recent.csv"
+CISA_KEV_URL = "https://raw.githubusercontent.com/cisagov/kev-data/main/data/known_exploited_vulnerabilities.csv"
+FEODO_TRACKER_URL = "https://feodotracker.abuse.ch/downloads/ipblocklist.csv"
+MAX_FILE_SIZE_MB = "512"
+CSV_CHUNK_SIZE = "100000"
+OUTPUT_DIR = "output"
+```
+
 ## Usage
 
 Run both live feeds:

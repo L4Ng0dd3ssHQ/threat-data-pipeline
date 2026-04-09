@@ -216,21 +216,42 @@ div[role="radiogroup"] label {
 }
 
 div.stButton > button {
-    background: linear-gradient(90deg, #ff6c2f, #ff944d);
-    color: white;
-    border: none;
+    background: linear-gradient(180deg, rgba(12, 22, 34, 0.96), rgba(7, 15, 24, 0.95));
+    color: #d9e8f6;
+    border: 1px solid rgba(157, 188, 212, 0.18);
     border-radius: 18px;
-    min-height: 92px;
+    min-height: 108px;
     width: 100%;
-    padding: 1.1rem 1.3rem;
-    font-size: 1.08rem;
+    padding: 1.25rem 1.4rem;
+    font-size: 1.02rem;
+    letter-spacing: 0.02em;
     font-weight: 700;
-    box-shadow: 0 16px 34px rgba(255, 108, 47, 0.24);
+    box-shadow: 0 10px 22px rgba(0, 0, 0, 0.18);
 }
 
 div.stButton > button:hover {
-    filter: brightness(1.06);
+    filter: brightness(1.04);
 }
+
+div[data-testid="column"] div.stButton > button {
+    background: linear-gradient(180deg, rgba(12, 22, 34, 0.98), rgba(7, 15, 24, 0.97));
+    color: #d9e8f6;
+    border: 1px solid rgba(157, 188, 212, 0.18);
+    min-height: 108px;
+    font-size: 1.02rem;
+    letter-spacing: 0.02em;
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.16);
+}
+
+.run-shell div.stButton > button {
+    background: linear-gradient(90deg, #ff6c2f, #ff944d);
+    color: white;
+    border: none;
+    min-height: 108px;
+    font-size: 1.18rem;
+    box-shadow: 0 18px 34px rgba(255, 108, 47, 0.26);
+}
+
 
 div[data-testid="stMetric"] {
     border: 1px solid var(--line);
@@ -367,6 +388,11 @@ div[data-testid="stMetricValue"] {
 
 .standby-shell {
     margin-top: 1rem;
+}
+
+
+.feed-select-note {
+    display: none;
 }
 
 @media (max-width: 900px) {
@@ -601,32 +627,50 @@ st.markdown(
 )
 
 st.write("")
-selector_shell = st.columns([1, 6, 1])
-with selector_shell[1]:
-    selected_label = st.radio(
-        "Choose a feed",
-        options=list(SOURCES.keys()),
-        horizontal=True,
-        label_visibility="collapsed",
-    )
-render_source_cards(selected_label)
+selected_label = st.session_state.get("dashboard_source", list(SOURCES.keys())[0])
+
+selection_columns = st.columns(len(SOURCES))
+for column, (label, meta) in zip(selection_columns, SOURCES.items()):
+    with column:
+        button_label = f"{chr(0x2713)} {label}" if label == selected_label else label
+        if st.button(button_label, key=f"feed_{label}", use_container_width=True):
+            st.session_state["dashboard_source"] = label
+            st.rerun()
+
+card_columns = st.columns(len(SOURCES))
+for column, (label, meta) in zip(card_columns, SOURCES.items()):
+    with column:
+        active_style = f"box-shadow: 0 0 0 1px {meta['accent']}, 0 18px 42px rgba(0,0,0,0.22);" if label == selected_label else ""
+        st.markdown(
+            f"""
+            <div class="source-card" style="{active_style}">
+                <div class="source-accent" style="background:{meta['accent']};"></div>
+                <div class="mono">{meta['eyebrow']}</div>
+                <h4>{label}</h4>
+                <p>{meta['description']}</p>
+            </div>
+            """,
+            unsafe_allow_html=True,
+        )
+
 selected_source = SOURCES[selected_label]
 accent = selected_source["accent"]
 
-control_left, control_right = st.columns([2.0, 1.15])
-with control_left:
-    st.markdown(
-        f"""
-        <div class=\"active-card\" style=\"border: 2px solid {accent}; box-shadow: 0 0 0 1px rgba(255,255,255,0.04), 0 18px 38px rgba(0,0,0,0.18);\">
-            <div class=\"mono\">Active feed</div>
-            <h3 style=\"margin-top:0.35rem;\">{selected_label}</h3>
+st.markdown(
+    f"""
+    <div class="stack-shell active-card">
+        <div class="active-card" style="border: 2px solid {accent}; box-shadow: 0 0 0 1px rgba(255,255,255,0.04), 0 18px 38px rgba(0,0,0,0.18);">
+            <div class="mono">Active feed</div>
+            <h3 style="margin-top:0.35rem;">{selected_label}</h3>
             <p>{selected_source['description']}</p>
         </div>
-        """,
-        unsafe_allow_html=True,
-    )
-with control_right:
-    st.markdown('<div class="control-label">Launch live run</div>', unsafe_allow_html=True)
+    </div>
+    """,
+    unsafe_allow_html=True,
+)
+
+run_shell = st.columns([1, 5, 1])
+with run_shell[1]:
     fetch_clicked = st.button("RUN LIVE SCAN", use_container_width=True)
 
 if fetch_clicked:

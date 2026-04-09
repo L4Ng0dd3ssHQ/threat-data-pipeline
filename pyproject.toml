@@ -9,6 +9,7 @@ description = "Production-style CSV analytics pipeline for cybersecurity threat 
 readme = "README.md"
 requires-python = ">=3.11"
 dependencies = [
+  "altair>=5.0.0",
   "charset-normalizer>=3.3.2",
   "matplotlib>=3.8.0",
   "numpy>=1.26.0",
