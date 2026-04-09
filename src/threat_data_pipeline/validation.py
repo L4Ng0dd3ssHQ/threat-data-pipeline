@@ -9,6 +9,10 @@ from .models import QualityReport
 from .utils import looks_like_url
 
 
+def _parse_datelike(series: pd.Series) -> pd.Series:
+    return pd.to_datetime(series, errors="coerce", utc=True, format="mixed")
+
+
 def infer_schema(df: pd.DataFrame) -> dict[str, str]:
     schema: dict[str, str] = {}
     for column in df.columns:
@@ -27,7 +31,7 @@ def infer_schema(df: pd.DataFrame) -> dict[str, str]:
         sample = non_null.astype(str).head(100)
         likely_date = sample.str.contains(r"\d{4}[-/]\d{1,2}[-/]\d{1,2}|\d{1,2}[-/]\d{1,2}[-/]\d{2,4}", regex=True).mean()
         if likely_date >= 0.5:
-            parsed_dates = pd.to_datetime(non_null, errors="coerce", utc=True)
+            parsed_dates = _parse_datelike(non_null)
             if parsed_dates.notna().mean() >= 0.8:
                 schema[column] = "date"
                 continue
@@ -57,7 +61,7 @@ def detect_inconsistencies(df: pd.DataFrame, schema: dict[str, str]) -> dict[str
             normalized = series.dropna().astype(str).str.strip()
             inconsistencies[column] = int((normalized != normalized.str.lower().str.title()).sum())
         elif kind == "date":
-            parsed = pd.to_datetime(series, errors="coerce", utc=True)
+            parsed = _parse_datelike(series)
             inconsistencies[column] = int(series.notna().sum() - parsed.notna().sum())
         elif kind == "url":
             inconsistencies[column] = int(

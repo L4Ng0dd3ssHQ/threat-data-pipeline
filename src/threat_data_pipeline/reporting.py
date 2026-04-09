@@ -22,6 +22,7 @@ from .validation import quality_report_to_frames
 
 LOGGER = logging.getLogger(__name__)
 INVALID_SHEET_TITLE_CHARS = re.compile(r"[:\\/?*\[\]]")
+EXCEL_CELL_CHAR_LIMIT = 32767
 
 
 def _excel_safe_sheet_name(name: str) -> str:
@@ -37,7 +38,8 @@ def _sanitize_for_excel(frame: pd.DataFrame) -> pd.DataFrame:
         if isinstance(value, pd.Timestamp) and value.tzinfo is not None:
             value = value.tz_localize(None)
         if isinstance(value, str):
-            return ILLEGAL_CHARACTERS_RE.sub("", value)
+            value = ILLEGAL_CHARACTERS_RE.sub("", value)
+            return value[:EXCEL_CELL_CHAR_LIMIT]
         return value
 
     sanitized = frame.copy()

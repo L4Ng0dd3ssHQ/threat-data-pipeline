@@ -2,8 +2,9 @@ from __future__ import annotations
 
 import pandas as pd
 
-from threat_data_pipeline.ingestion import _read_csv_with_recovery
 from threat_data_pipeline.cleaning import CleaningConfig, clean_dataframe
+from threat_data_pipeline.ingestion import _normalize_nested_values, _read_csv_with_recovery
+from threat_data_pipeline.reporting import EXCEL_CELL_CHAR_LIMIT, _sanitize_for_excel
 from threat_data_pipeline.utils import detect_encoding
 from threat_data_pipeline.validation import detect_outliers, infer_schema
 
@@ -72,7 +73,7 @@ def test_read_csv_with_recovery_handles_broken_quotes_with_comment_lines() -> No
         b"# comment line\n"
         b"url,tag\n"
         b"http://example.com,phishing\n"
-        b"\"broken line\n"
+        b'"broken line\n'
         b"http://second.test,malware\n"
     )
     artifact = _read_csv_with_recovery(
@@ -85,3 +86,21 @@ def test_read_csv_with_recovery_handles_broken_quotes_with_comment_lines() -> No
     )
     assert len(artifact.dataframe) >= 1
     assert "parser" in " ".join(artifact.errors).lower() or "malformed" in " ".join(artifact.errors).lower()
+
+
+def test_normalize_nested_values_makes_cells_hashable() -> None:
+    normalized = _normalize_nested_values(
+        pd.DataFrame(
+            {
+                "tags": [["phishing", "malware"]],
+                "meta": [{"pulse": "test"}],
+            }
+        )
+    )
+    assert normalized.loc[0, "tags"] == "phishing | malware"
+    assert normalized.loc[0, "meta"] == '{"pulse": "test"}'
+
+
+def test_sanitize_for_excel_truncates_long_cells() -> None:
+    sanitized = _sanitize_for_excel(pd.DataFrame({"body": ["x" * (EXCEL_CELL_CHAR_LIMIT + 10)]}))
+    assert len(sanitized.loc[0, "body"]) == EXCEL_CELL_CHAR_LIMIT

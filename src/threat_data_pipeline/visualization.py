@@ -1,9 +1,10 @@
 from __future__ import annotations
 
 from pathlib import Path
+import warnings
 
-import matplotlib.pyplot as plt
 import matplotlib.dates as mdates
+import matplotlib.pyplot as plt
 import pandas as pd
 
 from .analysis import choose_primary_trend_column
@@ -14,9 +15,12 @@ plt.style.use("ggplot")
 
 def _save_current_plot(path: Path) -> Path:
     path.parent.mkdir(parents=True, exist_ok=True)
-    plt.tight_layout()
+    figure = plt.gcf()
+    with warnings.catch_warnings():
+        warnings.simplefilter("ignore", UserWarning)
+        figure.tight_layout(pad=1.2)
     plt.savefig(path, dpi=150, bbox_inches="tight")
-    plt.close()
+    plt.close(figure)
     return path
 
 

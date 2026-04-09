@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import csv
 import io
+import json
 import logging
 from pathlib import Path
 
@@ -177,6 +178,20 @@ def _download_csv(url: str, params: dict[str, str] | None = None) -> bytes:
     return response.content
 
 
+def _normalize_nested_values(dataframe: pd.DataFrame) -> pd.DataFrame:
+    if dataframe.empty:
+        return dataframe
+
+    def normalize(value: object) -> object:
+        if isinstance(value, list):
+            return " | ".join(str(item) for item in value)
+        if isinstance(value, dict):
+            return json.dumps(value, sort_keys=True)
+        return value
+
+    return dataframe.map(normalize)
+
+
 def ingest_urlhaus(settings: Settings) -> IngestionArtifact:
     if not settings.urlhaus_api_key:
         raise IngestionError(
@@ -214,13 +229,14 @@ def ingest_threatfox(settings: Settings) -> IngestionArtifact:
     response = requests.post(
         "https://threatfox-api.abuse.ch/api/v1/",
         json={"query": "get_iocs", "days": 1},
-        headers={"API-KEY": settings.threatfox_api_key},
+        headers={"Auth-Key": settings.threatfox_api_key},
         timeout=60,
     )
     response.raise_for_status()
     data = response.json()
     records = data.get("data", [])
     dataframe = pd.DataFrame(records) if records else pd.DataFrame()
+    dataframe = _normalize_nested_values(dataframe)
     LOGGER.info("Ingested %s rows from threatfox", len(dataframe))
     return IngestionArtifact(
         source_name="threatfox",
@@ -248,6 +264,7 @@ def ingest_alienvault(settings: Settings) -> IngestionArtifact:
     data = response.json()
     records = data.get("results", [])
     dataframe = pd.DataFrame(records) if records else pd.DataFrame()
+    dataframe = _normalize_nested_values(dataframe)
     LOGGER.info("Ingested %s rows from alienvault", len(dataframe))
     return IngestionArtifact(
         source_name="alienvault",
