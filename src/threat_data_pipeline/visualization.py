@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from pathlib import Path
+import re
 import warnings
 
 import matplotlib.dates as mdates
@@ -11,6 +12,11 @@ from .analysis import choose_primary_trend_column
 
 
 plt.style.use("ggplot")
+
+
+def _safe_chart_key(value: object) -> str:
+    cleaned = re.sub(r"[^A-Za-z0-9._-]+", "_", str(value)).strip("._")
+    return cleaned or "chart"
 
 
 def _save_current_plot(path: Path) -> Path:
@@ -67,6 +73,7 @@ def generate_charts(
     primary_trend_column = choose_primary_trend_column(trends)
     if primary_trend_column:
         trend = trends[primary_trend_column]
+        safe_trend_key = _safe_chart_key(primary_trend_column)
         plt.figure(figsize=(11, 5))
         plt.plot(trend["date"], trend["count"], marker="o", label="Daily count")
         highlight = trend[trend["is_anomaly"]]
@@ -80,8 +87,8 @@ def generate_charts(
         plt.xlabel("Date")
         plt.ylabel("Count")
         plt.legend()
-        charts[f"timeline_{primary_trend_column}"] = _save_current_plot(
-            charts_dir / f"timeline_{primary_trend_column}.png"
+        charts[f"timeline_{safe_trend_key}"] = _save_current_plot(
+            charts_dir / f"timeline_{safe_trend_key}.png"
         )
 
     if not anomalies.empty:
@@ -102,12 +109,15 @@ def generate_charts(
     if df.shape[1] == 1:
         sole_column = df.columns[0]
         counts = df[sole_column].fillna("Unknown").astype(str).value_counts().head(10)
+        safe_column_key = _safe_chart_key(sole_column)
         plt.figure(figsize=(10, 5))
         plt.bar(counts.index.astype(str), counts.values)
         plt.xticks(rotation=45, ha="right")
         plt.title(f"Single-Column Distribution: {sole_column}")
         plt.xlabel(sole_column)
         plt.ylabel("Count")
-        charts["single_column_distribution"] = _save_current_plot(charts_dir / "single_column_distribution.png")
+        charts[f"single_column_distribution_{safe_column_key}"] = _save_current_plot(
+            charts_dir / f"single_column_distribution_{safe_column_key}.png"
+        )
 
     return charts
