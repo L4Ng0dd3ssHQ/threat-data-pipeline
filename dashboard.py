@@ -250,7 +250,10 @@ div[data-testid="column"] div.stButton > button {
     border: none;
     min-height: 108px;
     font-size: 1.18rem;
-    box-shadow: 0 18px 34px rgba(162, 57, 202, 0.3);
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    filter: saturate(1.3) brightness(1.08);
+    box-shadow: 0 18px 34px rgba(162, 57, 202, 0.45);
 }
 
 div[data-testid="stMetric"] {
