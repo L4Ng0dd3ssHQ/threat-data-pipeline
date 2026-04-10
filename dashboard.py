@@ -244,16 +244,17 @@ div[data-testid="column"] div.stButton > button {
     box-shadow: 0 12px 24px rgba(0, 0, 0, 0.16);
 }
 
+div.stButton > button[kind="primary"], 
 .run-shell div.stButton > button {
-    background: linear-gradient(90deg, #A239CA, #4717F6);
-    color: #E7DFDD;
-    border: none;
+    background: linear-gradient(90deg, #A239CA, #4717F6) !important;
+    color: #E7DFDD !important;
+    border: none !important;
     min-height: 108px;
     font-size: 1.18rem;
     font-weight: 700;
     letter-spacing: 0.08em;
     filter: saturate(1.3) brightness(1.08);
-    box-shadow: 0 18px 34px rgba(162, 57, 202, 0.45);
+    box-shadow: 0 18px 34px rgba(162, 57, 202, 0.45) !important;
 }
 
 div[data-testid="stMetric"] {
