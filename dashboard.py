@@ -57,25 +57,25 @@ CSS = """
 @import url("https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=IBM+Plex+Mono:wght@400;500&display=swap");
 
 :root {
-    --room-a: #2a1d21;
-    --room-b: #162738;
-    --room-c: #0f1724;
-    --shell: #d2c1b5;
-    --shell-shadow: #a99687;
-    --screen: #08121d;
-    --screen-2: #102132;
-    --panel: rgba(8, 18, 29, 0.86);
-    --line: rgba(157, 188, 212, 0.18);
-    --text: #ebf4ff;
-    --muted: #a8bfd2;
-    --mono: #7fd0ff;
+    --room-a: #0E0B16;
+    --room-b: #0E0B16;
+    --room-c: #0E0B16;
+    --shell: #2a1a3e;
+    --shell-shadow: #1a0e2e;
+    --screen: #0E0B16;
+    --screen-2: #130d20;
+    --panel: rgba(20, 10, 35, 0.86);
+    --line: rgba(162, 57, 202, 0.28);
+    --text: #E7DFDD;
+    --muted: #a89db8;
+    --mono: #A239CA;
 }
 
 .stApp {
     background:
-        radial-gradient(circle at 18% 20%, rgba(255, 122, 47, 0.22), transparent 25%),
-        radial-gradient(circle at 78% 12%, rgba(79, 140, 255, 0.22), transparent 24%),
-        linear-gradient(135deg, var(--room-a) 0%, var(--room-b) 52%, var(--room-c) 100%);
+        radial-gradient(circle at 18% 20%, rgba(162, 57, 202, 0.18), transparent 28%),
+        radial-gradient(circle at 78% 12%, rgba(71, 23, 246, 0.18), transparent 26%),
+        linear-gradient(135deg, #0E0B16 0%, #0E0B16 52%, #0E0B16 100%);
 }
 
 html, body, [class*="css"] {
@@ -92,14 +92,14 @@ section[data-testid="stSidebar"] {
     margin-bottom: 0;
     padding: 1.8rem 1.8rem 2rem 1.8rem;
     background:
-        linear-gradient(180deg, rgba(12, 22, 34, 0.96), rgba(7, 15, 24, 0.95)),
-        linear-gradient(135deg, var(--screen), var(--screen-2));
+        linear-gradient(180deg, rgba(14, 11, 22, 0.98), rgba(10, 7, 18, 0.97));
     border-radius: 16px;
     border: 16px solid var(--shell);
     box-shadow:
         0 0 0 8px var(--shell-shadow),
-        0 26px 80px rgba(0, 0, 0, 0.46),
-        inset 0 0 0 1px rgba(255, 255, 255, 0.04);
+        0 0 60px rgba(162, 57, 202, 0.12),
+        0 26px 80px rgba(0, 0, 0, 0.6),
+        inset 0 0 0 1px rgba(162, 57, 202, 0.06);
     position: relative;
 }
 
@@ -109,11 +109,11 @@ section[data-testid="stSidebar"] {
     inset: 0;
     border-radius: 4px;
     background:
-        linear-gradient(180deg, rgba(255, 255, 255, 0.05), transparent 22%),
+        linear-gradient(180deg, rgba(162, 57, 202, 0.04), transparent 22%),
         repeating-linear-gradient(
             180deg,
-            rgba(255, 255, 255, 0.014) 0px,
-            rgba(255, 255, 255, 0.014) 1px,
+            rgba(255, 255, 255, 0.010) 0px,
+            rgba(255, 255, 255, 0.010) 1px,
             transparent 2px,
             transparent 4px
         );
@@ -131,7 +131,7 @@ p, label, .stMarkdown, .stCaption {
 
 .workstation-head {
     border: 1px solid var(--line);
-    background: linear-gradient(135deg, rgba(7, 14, 24, 0.94), rgba(18, 35, 55, 0.78));
+    background: linear-gradient(135deg, rgba(14, 11, 22, 0.94), rgba(30, 15, 50, 0.78));
     border-radius: 20px;
     padding: 1.35rem 1.45rem 1.2rem 1.45rem;
 }
@@ -140,8 +140,8 @@ p, label, .stMarkdown, .stCaption {
     display: inline-block;
     padding: 0.34rem 0.72rem;
     border-radius: 999px;
-    background: linear-gradient(90deg, #ffe0aa, #f2c14e);
-    color: #20140d;
+    background: linear-gradient(90deg, #A239CA, #4717F6);
+    color: #E7DFDD;
     font-size: 0.74rem;
     font-weight: 700;
     text-transform: uppercase;
@@ -209,16 +209,16 @@ div[role="radiogroup"] {
 }
 
 div[role="radiogroup"] label {
-    background: rgba(11, 20, 31, 0.82);
+    background: rgba(20, 10, 35, 0.82);
     border: 1px solid var(--line);
     border-radius: 999px;
     padding: 0.36rem 0.9rem;
 }
 
 div.stButton > button {
-    background: linear-gradient(180deg, rgba(12, 22, 34, 0.96), rgba(7, 15, 24, 0.95));
-    color: #d9e8f6;
-    border: 1px solid rgba(157, 188, 212, 0.18);
+    background: linear-gradient(180deg, rgba(20, 10, 35, 0.96), rgba(14, 7, 24, 0.95));
+    color: #E7DFDD;
+    border: 1px solid rgba(162, 57, 202, 0.28);
     border-radius: 18px;
     min-height: 108px;
     width: 100%;
@@ -230,13 +230,14 @@ div.stButton > button {
 }
 
 div.stButton > button:hover {
-    filter: brightness(1.04);
+    filter: brightness(1.08);
+    border-color: rgba(162, 57, 202, 0.6);
 }
 
 div[data-testid="column"] div.stButton > button {
-    background: linear-gradient(180deg, rgba(12, 22, 34, 0.98), rgba(7, 15, 24, 0.97));
-    color: #d9e8f6;
-    border: 1px solid rgba(157, 188, 212, 0.18);
+    background: linear-gradient(180deg, rgba(20, 10, 35, 0.98), rgba(14, 7, 24, 0.97));
+    color: #E7DFDD;
+    border: 1px solid rgba(162, 57, 202, 0.28);
     min-height: 108px;
     font-size: 1.02rem;
     letter-spacing: 0.02em;
@@ -244,20 +245,19 @@ div[data-testid="column"] div.stButton > button {
 }
 
 .run-shell div.stButton > button {
-    background: linear-gradient(90deg, #ff6c2f, #ff944d);
-    color: white;
+    background: linear-gradient(90deg, #A239CA, #4717F6);
+    color: #E7DFDD;
     border: none;
     min-height: 108px;
     font-size: 1.18rem;
-    box-shadow: 0 18px 34px rgba(255, 108, 47, 0.26);
+    box-shadow: 0 18px 34px rgba(162, 57, 202, 0.3);
 }
-
 
 div[data-testid="stMetric"] {
     border: 1px solid var(--line);
     border-radius: 18px;
     padding: 0.8rem 0.95rem;
-    background: rgba(11, 19, 28, 0.62);
+    background: rgba(20, 10, 35, 0.62);
 }
 
 div[data-testid="stMetricValue"] {
@@ -274,7 +274,7 @@ div[data-testid="stMetricValue"] {
 .metric-ribbon-card {
     border: 1px solid var(--line);
     border-radius: 20px;
-    background: rgba(9, 17, 26, 0.7);
+    background: rgba(20, 10, 35, 0.7);
     padding: 1rem 1.1rem;
 }
 
@@ -293,9 +293,9 @@ div[data-testid="stMetricValue"] {
 }
 
 .error-panel {
-    border: 1px solid rgba(255, 99, 99, 0.22);
-    background: rgba(80, 26, 34, 0.68);
-    color: #ffd8d8;
+    border: 1px solid rgba(162, 57, 202, 0.3);
+    background: rgba(50, 10, 70, 0.68);
+    color: #E7DFDD;
     border-radius: 20px;
     padding: 1rem 1.1rem;
 }
@@ -303,11 +303,11 @@ div[data-testid="stMetricValue"] {
 .drive-base {
     max-width: 760px;
     margin: -4px auto 2.5rem auto;
-    background: linear-gradient(180deg, #d3c2b7, #b9a79b);
-    border: 1px solid rgba(77, 56, 46, 0.35);
+    background: linear-gradient(180deg, #2a1a3e, #1a0e2e);
+    border: 1px solid rgba(162, 57, 202, 0.25);
     border-radius: 0 0 22px 22px;
     padding: 1.2rem 1.4rem 1rem 1.4rem;
-    box-shadow: 0 24px 60px rgba(0, 0, 0, 0.25);
+    box-shadow: 0 24px 60px rgba(0, 0, 0, 0.4);
 }
 
 .drive-row {
@@ -319,8 +319,8 @@ div[data-testid="stMetricValue"] {
 .drive-slot {
     height: 78px;
     border-radius: 10px;
-    background: linear-gradient(180deg, #8a96a5, #657181);
-    border: 6px solid #aeb7c2;
+    background: linear-gradient(180deg, #1e0e30, #130920);
+    border: 6px solid #2d1545;
     position: relative;
 }
 
@@ -332,7 +332,8 @@ div[data-testid="stMetricValue"] {
     width: 78%;
     height: 11px;
     border-radius: 3px;
-    background: #2d343d;
+    background: #4717F6;
+    opacity: 0.4;
 }
 
 .drive-slot::after {
@@ -343,14 +344,15 @@ div[data-testid="stMetricValue"] {
     width: 12px;
     height: 12px;
     border-radius: 50%;
-    background: #435063;
+    background: #A239CA;
+    opacity: 0.7;
 }
 
 .base-brand {
     margin-top: 0.9rem;
     text-align: center;
     font-family: "IBM Plex Mono", monospace;
-    color: #334155;
+    color: #A239CA;
     letter-spacing: 0.14em;
     font-size: 0.78rem;
 }
@@ -360,7 +362,6 @@ div[data-testid="stMetricValue"] {
     overflow: hidden;
 }
 
-
 .stack-shell {
     max-width: 760px;
     margin: 0 auto;
@@ -369,7 +370,7 @@ div[data-testid="stMetricValue"] {
 .selector-strip {
     border: 1px solid var(--line);
     border-radius: 8px;
-    background: rgba(8, 18, 29, 0.96);
+    background: rgba(14, 11, 22, 0.96);
     padding: 0.55rem 0.7rem;
     margin-top: 0.7rem;
 }
@@ -377,7 +378,7 @@ div[data-testid="stMetricValue"] {
 .run-shell {
     border: 1px solid var(--line);
     border-radius: 8px;
-    background: rgba(8, 18, 29, 0.96);
+    background: rgba(14, 11, 22, 0.96);
     padding: 0.7rem;
     margin-top: 0.9rem;
 }
@@ -389,7 +390,6 @@ div[data-testid="stMetricValue"] {
 .standby-shell {
     margin-top: 1rem;
 }
-
 
 .feed-select-note {
     display: none;
