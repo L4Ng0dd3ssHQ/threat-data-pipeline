@@ -180,7 +180,6 @@ p, label, .stMarkdown, .stCaption {
 }
 
 .source-card {
-    min-height: 158px;
     padding: 1rem;
 }
 
@@ -244,12 +243,10 @@ div[data-testid="column"] div.stButton > button {
     box-shadow: 0 12px 24px rgba(0, 0, 0, 0.16);
 }
 
-div.stButton > button[kind="primary"], 
-.run-shell div.stButton > button {
+.run-btn-wrap div.stButton > button {
     background: linear-gradient(90deg, #A239CA, #4717F6) !important;
     color: #E7DFDD !important;
     border: none !important;
-    min-height: 108px;
     font-size: 1.18rem;
     font-weight: 700;
     letter-spacing: 0.08em;
@@ -675,7 +672,9 @@ st.markdown(
 
 run_shell = st.columns([1, 5, 1])
 with run_shell[1]:
+    st.markdown('<div class="run-btn-wrap">', unsafe_allow_html=True)
     fetch_clicked = st.button("RUN LIVE SCAN", use_container_width=True)
+    st.markdown('</div>', unsafe_allow_html=True)
 
 if fetch_clicked:
     try:
