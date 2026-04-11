@@ -606,7 +606,7 @@ st.markdown(
     """
     <div class="workstation-head">
         <span class="badge">Retro analyst workstation</span>
-        <div class="hero-title" style="width:100%; max-width:none; white-space:normal; word-break:keep-all; overflow-wrap:normal; text-align:center; font-size:clamp(2.4rem, 4.6vw, 4.8rem); line-height:1.02;">Threat<br>Station 86.</div>
+        <div class="hero-title" style="width:100%; max-width:none; white-space:normal; word-break:keep-all; overflow-wrap:normal; text-align:center; font-size:clamp(2.4rem, 4.6vw, 4.8rem); line-height:1.02;">Threat Station 86.</div>
         <div class="hero-copy" style="margin-inline:auto;">
             A live intelligence console with a vintage desktop feel and a modern analyst workflow. Pull any feed, spotlight the strongest signal, and pivot through interactive charts without losing the visual drama.
         </div>
