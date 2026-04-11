@@ -71,14 +71,25 @@ def _get_int_setting(name: str, default: int) -> int:
 
 def load_settings() -> Settings:
     load_dotenv()
+
+    def get(key: str, default: str | None = None) -> str | None:
+        val = os.getenv(key)
+        if val:
+            return val
+        try:
+            import streamlit as st
+            return st.secrets.get(key, default)
+        except Exception:
+            return default
+
     return Settings(
-        urlhaus_api_key=_get_setting("URLHAUS_API_KEY"),
-        threatfox_api_key=_get_setting("THREATFOX_API_KEY"),
-        alienvault_api_key=_get_setting("ALIENVAULT_API_KEY"),
-        urlhaus_feed_url=_get_setting("URLHAUS_FEED_URL", DEFAULT_URLHAUS_URL) or DEFAULT_URLHAUS_URL,
-        cisa_kev_url=_get_setting("CISA_KEV_URL", DEFAULT_KEV_URL) or DEFAULT_KEV_URL,
-        feodo_tracker_url=_get_setting("FEODO_TRACKER_URL", DEFAULT_FEODO_URL) or DEFAULT_FEODO_URL,
-        max_file_size_mb=_get_int_setting("MAX_FILE_SIZE_MB", 512),
-        chunk_size=_get_int_setting("CSV_CHUNK_SIZE", 100_000),
-        output_dir=Path(_get_setting("OUTPUT_DIR", "output") or "output"),
+        urlhaus_api_key=get("URLHAUS_API_KEY"),
+        threatfox_api_key=get("THREATFOX_API_KEY"),
+        alienvault_api_key=get("ALIENVAULT_API_KEY"),
+        urlhaus_feed_url=get("URLHAUS_FEED_URL", DEFAULT_URLHAUS_URL),
+        cisa_kev_url=get("CISA_KEV_URL", DEFAULT_KEV_URL),
+        feodo_tracker_url=get("FEODO_TRACKER_URL", DEFAULT_FEODO_URL),
+        max_file_size_mb=int(get("MAX_FILE_SIZE_MB", "512")),
+        chunk_size=int(get("CSV_CHUNK_SIZE", "100000")),
+        output_dir=Path(get("OUTPUT_DIR", "output")),
     )
